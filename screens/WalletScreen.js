@@ -4,6 +4,7 @@ import { FinanceContext } from "../context/FinanceContext";
 import { PieChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import { ThemeContext } from "../context/ThemeContext";
+import ThemedContainer from "../components/ThemedContainer";
 
 export default function WalletScreen() {
   const { theme } = useContext(ThemeContext);
@@ -49,34 +50,46 @@ export default function WalletScreen() {
       name: category,
       amount: categoryTotals[category],
       color: colors[index % colors.length],
-      legendFontColor: "#FFF",
+      legendFontColor: theme.text,
       legendFontSize: 12,
     };
   });
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Wallet Overview</Text>
+    <ThemedContainer style={styles.container}>
+      <Text style={[styles.title, { color: theme.text }]}>Wallet Overview</Text>
 
-      <Text style={styles.balance}>₦ {totalBalance.toLocaleString()}</Text>
+      <Text style={[styles.balance, { color: theme.success }]}>
+        ₦ {totalBalance.toLocaleString()}
+      </Text>
 
       <View style={styles.row}>
-        <View style={styles.box}>
-          <Text style={styles.label}>Income</Text>
-          <Text style={styles.income}>₦ {totalIncome.toLocaleString()}</Text>
+        <View style={[styles.box, { backgroundColor: theme.card }]}>
+          <Text style={[styles.label, { color: theme.subText }]}>Income</Text>
+          <Text style={[styles.income, { color: theme.success }]}>
+            ₦ {totalIncome.toLocaleString()}
+          </Text>
         </View>
 
-        <View style={styles.box}>
-          <Text style={styles.label}>Expense</Text>
-          <Text style={styles.expense}>₦ {totalExpense.toLocaleString()}</Text>
+        <View style={[styles.box, { backgroundColor: theme.card }]}>
+          <Text style={[styles.label, { color: theme.subText }]}>Expense</Text>
+          <Text style={[styles.expense, { color: theme.danger }]}>
+            ₦ {totalExpense.toLocaleString()}
+          </Text>
         </View>
       </View>
 
-      <View style={styles.savingsBox}>
-        <Text style={styles.label}>Savings Rate</Text>
-        <Text style={styles.savings}>{savingsRate}%</Text>
+      <View style={[styles.savingsBox, { backgroundColor: theme.card }]}>
+        <Text style={[styles.label, { color: theme.subText }]}>
+          Savings Rate
+        </Text>
+        <Text style={[styles.savings, { color: theme.accent }]}>
+          {savingsRate}%
+        </Text>
       </View>
       <View style={styles.breakdownContainer}>
-        <Text style={styles.label}>Income vs Expense</Text>
+        <Text style={[styles.label, { color: theme.subText }]}>
+          Income vs Expense
+        </Text>
 
         <View style={styles.bar}>
           <View style={[styles.incomeBar, { width: `${incomePercent}%` }]} />
@@ -84,14 +97,20 @@ export default function WalletScreen() {
         </View>
 
         <View style={styles.percentRow}>
-          <Text style={styles.income}>{incomePercent.toFixed(1)}%</Text>
-          <Text style={styles.expense}>{expensePercent.toFixed(1)}%</Text>
+          <Text style={[styles.income, { color: theme.success }]}>
+            {incomePercent.toFixed(1)}%
+          </Text>
+          <Text style={[styles.expense, { color: theme.danger }]}>
+            {expensePercent.toFixed(1)}%
+          </Text>
         </View>
       </View>
 
       {chartData.length > 0 && (
         <View style={{ marginTop: 40 }}>
-          <Text style={styles.label}>Expense Breakdown</Text>
+          <Text style={[styles.label, { color: theme.subText }]}>
+            Expense Breakdown
+          </Text>
 
           <PieChart
             data={chartData}
@@ -110,7 +129,7 @@ export default function WalletScreen() {
           />
         </View>
       )}
-    </View>
+    </ThemedContainer>
   );
 }
 

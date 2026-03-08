@@ -10,20 +10,19 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { LineChart } from "react-native-chart-kit";
 import { useContext } from "react";
 import { FinanceContext } from "../context/FinanceContext";
 import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
-import ThemedContainer from "../components/ThemedContainer";
 import { ThemeContext } from "../context/ThemeContext";
+import ThemedContainer from "../components/ThemedContainer";
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function HomeScreen() {
-  const { theme } = useContext(ThemeContext);
+  const { darkMode, toggleTheme, theme } = useContext(ThemeContext);
   const navigation = useNavigation();
   const { transactions, totalIncome, totalExpense, totalBalance } =
     useContext(FinanceContext);
@@ -51,20 +50,25 @@ export default function HomeScreen() {
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={[styles.header, { color: theme.text }]}>Dashboard</Text>
+        <View style={styles.headerRow}>
+          <Text style={[styles.header, { color: theme.text }]}>Dashboard</Text>
+
+          <TouchableOpacity onPress={toggleTheme}>
+            <Ionicons
+              name={darkMode ? "sunny" : "moon"}
+              size={24}
+              color={theme.text}
+            />
+          </TouchableOpacity>
+        </View>
 
         {/* Animated Balance Card */}
         <Pressable onPressIn={handlePressIn} onPressOut={handlePressOut}>
-          <Animated.View
-            style={[
-              [styles.card, { backgroundColor: theme.card }],
-              {
-                transform: [{ scale: scaleAnim }],
-              },
-            ]}
-          >
-            <Text style={styles.cardTitle}>Total Balance</Text>
-            <Text style={styles.balance}>
+          <Animated.View style={[styles.card, { backgroundColor: theme.card }]}>
+            <Text style={[styles.cardTitle, { color: theme.subText }]}>
+              Total Balance
+            </Text>
+            <Text style={[styles.balance, { color: theme.text }]}>
               ₦ {totalBalance.toLocaleString()}
             </Text>
           </Animated.View>
@@ -74,25 +78,31 @@ export default function HomeScreen() {
         <View style={styles.statsRow}>
           <View style={[styles.statBox, { backgroundColor: theme.card }]}>
             <Ionicons name="arrow-down-circle" size={28} color="#22C55E" />
-            <Text style={styles.statAmount}>
+            <Text style={[styles.statAmount, { color: theme.text }]}>
               ₦ {totalIncome.toLocaleString()}
             </Text>
-            <Text style={styles.statLabel}>Income</Text>
+            <Text style={[styles.statLabel, { color: theme.subText }]}>
+              Income
+            </Text>
           </View>
 
           <View style={[styles.statBox, { backgroundColor: theme.card }]}>
             <Ionicons name="arrow-up-circle" size={28} color="#EF4444" />
-            <Text style={styles.statAmount}>
+            <Text style={[styles.statAmount, { color: theme.text }]}>
               ₦ {totalExpense.toLocaleString()}
             </Text>
-            <Text style={styles.statLabel}>Expenses</Text>
+            <Text style={[styles.statLabel, { color: theme.subText }]}>
+              Expenses
+            </Text>
           </View>
         </View>
 
         {/* Chart Section */}
-        <Text style={styles.sectionTitle}>Spending Overview</Text>
+        <Text style={[styles.sectionTitle, { color: theme.text }]}>
+          Spending Overview
+        </Text>
 
-        <View style={[styles.chartContainer, { backgroundColor: theme.card }]}>
+        <View style={styles.chartContainer}>
           <LineChart
             data={{
               labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -122,7 +132,9 @@ export default function HomeScreen() {
         </View>
 
         {/* Transactions */}
-        <Text style={styles.sectionTitle}>Recent Transactions</Text>
+        <Text style={[styles.sectionTitle, { color: theme.text }]}>
+          Recent Transactions
+        </Text>
 
         <FlatList
           data={transactions}
@@ -141,7 +153,9 @@ export default function HomeScreen() {
                 style={[styles.transaction, { backgroundColor: theme.card }]}
               >
                 <Text style={styles.transactionText}>{item.title}</Text>
-                <Text style={styles.categoryBadge}>{item.category}</Text>
+                <Text style={[styles.categoryBadge, { color: theme.accent }]}>
+                  {item.category}
+                </Text>
                 <Text
                   style={
                     item.type === "income" ? styles.income : styles.expense
@@ -174,10 +188,10 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 40,
   },
-  header: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#FFFFFF",
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 20,
   },
   card: {

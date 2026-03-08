@@ -115,7 +115,7 @@ npx expo start
 
 ## 👨‍💻 Author
 
-Built with ❤️ using **React Native + Expo**.
+Built using **React Native + Expo**.
 
 ---
 

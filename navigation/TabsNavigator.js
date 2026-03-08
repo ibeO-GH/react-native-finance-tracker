@@ -1,23 +1,29 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
-
 import HomeScreen from "../screens/HomeScreen";
 import WalletScreen from "../screens/WalletScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabsNavigator() {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
+
         tabBarStyle: {
-          backgroundColor: "#111827",
+          backgroundColor: theme.card,
           borderTopWidth: 0,
         },
-        tabBarActiveTintColor: "#6366F1",
-        tabBarInactiveTintColor: "#94A3B8",
+
+        tabBarActiveTintColor: theme.accent,
+        tabBarInactiveTintColor: theme.subText,
+
         tabBarIcon: ({ color, size }) => {
           let iconName;
 

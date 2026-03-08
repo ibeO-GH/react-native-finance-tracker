@@ -1,17 +1,11 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-  Switch,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useContext } from "react";
 import { FinanceContext } from "../context/FinanceContext";
 import { ThemeContext } from "../context/ThemeContext";
+import ThemedContainer from "../components/ThemedContainer";
 
 export default function ProfileScreen() {
-  const { darkMode, toggleTheme, theme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
   const { resetTransactions } = useContext(FinanceContext);
 
@@ -41,15 +35,8 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}>
+    <ThemedContainer style={styles.container}>
       <Text style={[styles.title, { color: theme.text }]}>Profile</Text>
-      <View style={styles.toggleRow}>
-        <Text style={[styles.toggleText, { color: theme.text }]}>
-          Dark Mode
-        </Text>
-
-        <Switch value={darkMode} onValueChange={toggleTheme} />
-      </View>
 
       <TouchableOpacity style={styles.resetButton} onPress={handleReset}>
         <Text style={styles.resetText}>Reset All Data</Text>
@@ -59,11 +46,12 @@ export default function ProfileScreen() {
         <Text style={[styles.infoText, { color: theme.text }]}>
           Finance Tracker v1.0
         </Text>
+
         <Text style={[styles.infoSub, { color: theme.subText }]}>
           Built with React Native + Expo
         </Text>
       </View>
-    </View>
+    </ThemedContainer>
   );
 }
 
@@ -77,16 +65,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: "#FFF",
     marginBottom: 30,
-  },
-  toggleRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 30,
-  },
-
-  toggleText: {
-    fontSize: 16,
   },
   resetButton: {
     backgroundColor: "#EF4444",
