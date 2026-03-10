@@ -44,6 +44,41 @@ export default function HomeScreen() {
 
   const { deleteTransaction } = useContext(FinanceContext);
 
+  const monthlyExpenses = Array(12).fill(0);
+
+  transactions.forEach((t) => {
+    if (t.type === "expense") {
+      const month = new Date(t.date).getMonth();
+      monthlyExpenses[month] += t.amount;
+    }
+  });
+
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const currentMonth = new Date().getMonth();
+
+  const chartLabels = [];
+  const chartValues = [];
+
+  for (let i = 5; i >= 0; i--) {
+    const index = (currentMonth - i + 12) % 12;
+    chartLabels.push(monthNames[index]);
+    chartValues.push(monthlyExpenses[index]);
+  }
+
   return (
     <ThemedContainer safe>
       <ScrollView
@@ -105,10 +140,10 @@ export default function HomeScreen() {
         <View style={styles.chartContainer}>
           <LineChart
             data={{
-              labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+              labels: chartLabels,
               datasets: [
                 {
-                  data: [200, 180, 220, 190, 250, 230],
+                  data: chartValues,
                 },
               ],
             }}
