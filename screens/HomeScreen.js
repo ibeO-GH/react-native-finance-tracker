@@ -79,6 +79,10 @@ export default function HomeScreen() {
     chartValues.push(monthlyExpenses[index]);
   }
 
+  const chartValuesSafe = chartValues.every((v) => v === 0)
+    ? [1, 1, 1, 1, 1, 1]
+    : chartValues;
+
   return (
     <ThemedContainer safe>
       <ScrollView
@@ -143,7 +147,7 @@ export default function HomeScreen() {
               labels: chartLabels,
               datasets: [
                 {
-                  data: chartValues,
+                  data: chartValuesSafe,
                 },
               ],
             }}
